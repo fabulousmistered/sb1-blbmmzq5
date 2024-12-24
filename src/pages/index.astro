@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PassageCard from '../components/PassageCard.astro';
+import { passages } from '../data/passages';
+
+const today = new Date();
+const passageIndex = today.getDate() % passages.length;
+const todaysPassage = passages[passageIndex];
+---
+
+<Layout title="Daily Latin - Ovid's Metamorphoses">
+  <main>
+    <h1>Daily Latin Translation</h1>
+    <p class="subtitle">From Ovid's Metamorphoses</p>
+    
+    <PassageCard 
+      latin={todaysPassage.latin}
+      english={todaysPassage.english}
+      book={todaysPassage.book}
+      lines={todaysPassage.lines}
+      context={todaysPassage.context}
+      date={today.toISOString().split('T')[0]}
+    />
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 2rem;
+    max-width: 800px;
+    color: #333;
+    background: #f9f9f9;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-bottom: 3rem;
+  }
+</style>

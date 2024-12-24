@@ -1,0 +1,75 @@
+---
+import { highlightVerbs } from '../data/passages';
+import ReferenceTranslation from './ReferenceTranslation.astro';
+import TranslationForm from './TranslationForm';
+
+interface Props {
+  latin: string;
+  english: string;
+  book: number;
+  lines: string;
+  context: string;
+  date: string;
+}
+
+const { latin, english, book, lines, context, date } = Astro.props;
+const highlightedLatin = highlightVerbs(latin);
+const passageId = `${book}_${lines}`;
+---
+
+<div class="passage-card">
+  <div class="metadata">
+    <span>Book {book}, Lines {lines}</span>
+    <span class="date">{new Date(date).toLocaleDateString()}</span>
+  </div>
+  <div class="context">{context}</div>
+  <div class="latin" set:html={highlightedLatin}></div>
+  
+  <TranslationForm client:load passageId={passageId} date={date} />
+  <ReferenceTranslation english={english} />
+</div>
+
+<style>
+  .passage-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .metadata {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .date {
+    color: #888;
+  }
+
+  .context {
+    font-style: italic;
+    color: #444;
+    margin-bottom: 1.5rem;
+  }
+
+  .latin {
+    font-size: 1.2rem;
+    line-height: 2;
+    margin-bottom: 2rem;
+    font-family: "Times New Roman", serif;
+    white-space: pre-line;
+  }
+
+  :global(.verb) {
+    color: #cc0000;
+  }
+
+  :global(.verb.subjunctive) {
+    font-style: italic;
+  }
+</style>
